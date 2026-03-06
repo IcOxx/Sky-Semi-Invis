@@ -1,0 +1,392 @@
+-- Rainbow Invisible UI
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+local DEPTH_OFFSET = 0.09
+
+local connections = { SemiInvisible = {} }
+local isInvisible = false
+local clone, oldRoot, hip, animTrack, connection, characterConnection
+
+-- ══════════════════════════════════════════
+--              RAINBOW UI
+-- ══════════════════════════════════════════
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RainbowInvisibleHub"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 280, 0, 160)
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -80)
+mainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
+mainFrame.BackgroundTransparency = 0.25
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+-- Rounded corners
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 22)
+corner.Parent = mainFrame
+
+-- Rainbow border stroke
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 2.5
+stroke.Color = Color3.fromRGB(255, 80, 80)
+stroke.Transparency = 0.1
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = mainFrame
+
+-- Blur background effect
+local blur = Instance.new("UIGradient")
+blur.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(15, 10, 25)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 5, 15)),
+})
+blur.Rotation = 135
+blur.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.15),
+    NumberSequenceKeypoint.new(1, 0.35),
+})
+blur.Parent = mainFrame
+
+-- Title bar
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, 38)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(20, 15, 35)
+titleBar.BackgroundTransparency = 0.3
+titleBar.BorderSizePixel = 0
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 22)
+titleCorner.Parent = titleBar
+
+-- Bottom cover for title bar corners
+local titleFix = Instance.new("Frame")
+titleFix.Size = UDim2.new(1, 0, 0, 18)
+titleFix.Position = UDim2.new(0, 0, 1, -18)
+titleFix.BackgroundColor3 = Color3.fromRGB(20, 15, 35)
+titleFix.BackgroundTransparency = 0.3
+titleFix.BorderSizePixel = 0
+titleFix.Parent = titleBar
+
+-- Rainbow gradient on title
+local titleGradient = Instance.new("UIGradient")
+titleGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0,   Color3.fromRGB(255, 80,  80)),
+    ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 180, 50)),
+    ColorSequenceKeypoint.new(0.4, Color3.fromRGB(80,  255, 120)),
+    ColorSequenceKeypoint.new(0.6, Color3.fromRGB(80,  200, 255)),
+    ColorSequenceKeypoint.new(0.8, Color3.fromRGB(180, 80,  255)),
+    ColorSequenceKeypoint.new(1,   Color3.fromRGB(255, 80,  160)),
+})
+titleGradient.Rotation = 0
+titleGradient.Parent = titleBar
+
+-- Title label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "Title"
+titleLabel.Size = UDim2.new(1, -20, 1, 0)
+titleLabel.Position = UDim2.new(0, 12, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "✦  Sky Hub  ✦"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 15
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.TextTransparency = 0.05
+titleLabel.Parent = titleBar
+
+-- Subtitle / status
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Name = "Status"
+statusLabel.Size = UDim2.new(1, -20, 0, 22)
+statusLabel.Position = UDim2.new(0, 14, 0, 44)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = "Status : Visible"
+statusLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+statusLabel.TextSize = 12
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+statusLabel.Parent = mainFrame
+
+-- Toggle Button
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Name = "ToggleButton"
+toggleBtn.Size = UDim2.new(1, -28, 0, 38)
+toggleBtn.Position = UDim2.new(0, 14, 0, 74)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 20, 50)
+toggleBtn.BackgroundTransparency = 0.3
+toggleBtn.BorderSizePixel = 0
+toggleBtn.Text = "⬡  SEMI INVIS"
+toggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleBtn.TextSize = 13
+toggleBtn.Font = Enum.Font.GothamSemibold
+toggleBtn.AutoButtonColor = false
+toggleBtn.Parent = mainFrame
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 12)
+btnCorner.Parent = toggleBtn
+
+local btnGradient = Instance.new("UIGradient")
+btnGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0,   Color3.fromRGB(100, 60, 200)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(60,  120, 220)),
+    ColorSequenceKeypoint.new(1,   Color3.fromRGB(80,  200, 180)),
+})
+btnGradient.Rotation = 90
+btnGradient.Parent = toggleBtn
+
+local btnStroke = Instance.new("UIStroke")
+btnStroke.Thickness = 1.5
+btnStroke.Color = Color3.fromRGB(120, 100, 255)
+btnStroke.Transparency = 0.4
+btnStroke.Parent = toggleBtn
+
+-- Credit label
+local creditLabel = Instance.new("TextLabel")
+creditLabel.Size = UDim2.new(1, 0, 0, 18)
+creditLabel.Position = UDim2.new(0, 0, 1, -22)
+creditLabel.BackgroundTransparency = 1
+creditLabel.Text = "Sky Hub • v1.0"
+creditLabel.TextColor3 = Color3.fromRGB(100, 100, 130)
+creditLabel.TextSize = 10
+creditLabel.Font = Enum.Font.Gotham
+creditLabel.TextXAlignment = Enum.TextXAlignment.Center
+creditLabel.Parent = mainFrame
+
+-- ══════════════════════════════════════════
+--         RAINBOW ANIMATION LOOP
+-- ══════════════════════════════════════════
+
+local hue = 0
+RunService.Heartbeat:Connect(function(dt)
+    hue = (hue + dt * 0.25) % 1
+
+    -- Animate border stroke color
+    stroke.Color = Color3.fromHSV(hue, 0.85, 1)
+
+    -- Animate title gradient offset
+    titleGradient.Offset = Vector2.new(-hue * 2, 0)
+
+    -- Pulse button gradient
+    local pulse = math.sin(tick() * 2) * 0.5 + 0.5
+    btnGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.1 + pulse * 0.15),
+        NumberSequenceKeypoint.new(1, 0.1 + pulse * 0.15),
+    })
+end)
+
+-- ══════════════════════════════════════════
+--         HOVER EFFECTS
+-- ══════════════════════════════════════════
+
+toggleBtn.MouseEnter:Connect(function()
+    TweenService:Create(toggleBtn, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.05
+    }):Play()
+end)
+
+toggleBtn.MouseLeave:Connect(function()
+    TweenService:Create(toggleBtn, TweenInfo.new(0.2), {
+        BackgroundTransparency = 0.3
+    }):Play()
+end)
+
+-- ══════════════════════════════════════════
+--         SCRIPT LOGIC (inchangé)
+-- ══════════════════════════════════════════
+
+local function removeFolders()
+    local playerFolder = Workspace:FindFirstChild(LocalPlayer.Name)
+    if not playerFolder then return end
+    for _, name in pairs({"DoubleRig", "Constraints"}) do
+        local obj = playerFolder:FindFirstChild(name)
+        if obj then obj:Destroy() end
+    end
+    table.insert(connections.SemiInvisible, playerFolder.ChildAdded:Connect(function(child)
+        if child.Name == "DoubleRig" or child.Name == "Constraints" then child:Destroy() end
+    end))
+end
+
+local function doClone()
+    if not LocalPlayer.Character or LocalPlayer.Character.Humanoid.Health <= 0 then return false end
+    hip = LocalPlayer.Character.Humanoid.HipHeight
+    oldRoot = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not oldRoot or not oldRoot.Parent then return false end
+    local tempParent = Instance.new("Model")
+    tempParent.Parent = game
+    LocalPlayer.Character.Parent = tempParent
+    clone = oldRoot:Clone()
+    clone.Parent = LocalPlayer.Character
+    oldRoot.Parent = game.Workspace.CurrentCamera
+    clone.CFrame = oldRoot.CFrame
+    LocalPlayer.Character.PrimaryPart = clone
+    LocalPlayer.Character.Parent = game.Workspace
+    for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
+        if v:IsA("Weld") or v:IsA("Motor6D") then
+            if v.Part0 == oldRoot then v.Part0 = clone end
+            if v.Part1 == oldRoot then v.Part1 = clone end
+        end
+    end
+    tempParent:Destroy()
+    return true
+end
+
+local function revertClone()
+    if not oldRoot or not oldRoot:IsDescendantOf(game.Workspace) or not LocalPlayer.Character or LocalPlayer.Character.Humanoid.Health <= 0 then return end
+    local tempParent = Instance.new("Model")
+    tempParent.Parent = game
+    LocalPlayer.Character.Parent = tempParent
+    oldRoot.Parent = LocalPlayer.Character
+    LocalPlayer.Character.PrimaryPart = oldRoot
+    LocalPlayer.Character.Parent = game.Workspace
+    oldRoot.CanCollide = true
+    for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
+        if v:IsA("Weld") or v:IsA("Motor6D") then
+            if v.Part0 == clone then v.Part0 = oldRoot end
+            if v.Part1 == clone then v.Part1 = oldRoot end
+        end
+    end
+    if clone then
+        local oldPos = clone.CFrame
+        clone:Destroy()
+        clone = nil
+        oldRoot.CFrame = oldPos
+    end
+    oldRoot = nil
+    if LocalPlayer.Character and LocalPlayer.Character.Humanoid then
+        LocalPlayer.Character.Humanoid.HipHeight = hip
+    end
+end
+
+local function animationTrickery()
+    if not LocalPlayer.Character or LocalPlayer.Character.Humanoid.Health <= 0 then return end
+    local anim = Instance.new("Animation")
+    anim.AnimationId = "http://www.roblox.com/asset/?id=18537363391"
+    local humanoid = LocalPlayer.Character.Humanoid
+    local animator = humanoid:FindFirstChild("Animator") or Instance.new("Animator", humanoid)
+    animTrack = animator:LoadAnimation(anim)
+    animTrack.Priority = Enum.AnimationPriority.Action4
+    animTrack:Play(0, 1, 0)
+    anim:Destroy()
+    table.insert(connections.SemiInvisible, animTrack.Stopped:Connect(function()
+        if isInvisible then animationTrickery() end
+    end))
+    task.delay(0, function()
+        animTrack.TimePosition = 0.7
+        task.delay(1, function() animTrack:AdjustSpeed(math.huge) end)
+    end)
+end
+
+local function setupGodmode()
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hum = char:WaitForChild("Humanoid")
+    local mt = getrawmetatable(game)
+    local oldNC, oldNI = mt.__namecall, mt.__newindex
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(self, ...)
+        local m = getnamecallmethod()
+        if self == hum then
+            if m == "ChangeState" and select(1, ...) == Enum.HumanoidStateType.Dead then return end
+            if m == "SetStateEnabled" then
+                local st, en = ...
+                if st == Enum.HumanoidStateType.Dead and en == true then return end
+            end
+            if m == "Destroy" then return end
+        end
+        if self == char and m == "BreakJoints" then return end
+        return oldNC(self, ...)
+    end)
+    mt.__newindex = newcclosure(function(self, k, v)
+        if self == hum then
+            if k == "Health" and type(v) == "number" and v <= 0 then return end
+            if k == "MaxHealth" and type(v) == "number" and v < hum.MaxHealth then return end
+            if k == "BreakJointsOnDeath" and v == true then return end
+            if k == "Parent" and v == nil then return end
+        end
+        return oldNI(self, k, v)
+    end)
+    setreadonly(mt, true)
+end
+
+local function enableInvisibility()
+    if not LocalPlayer.Character or LocalPlayer.Character.Humanoid.Health <= 0 then return false end
+    removeFolders()
+    if not doClone() then return false end
+    task.wait(0.1)
+    animationTrickery()
+    connection = RunService.PreSimulation:Connect(function()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") and LocalPlayer.Character.Humanoid.Health > 0 and oldRoot then
+            local root = LocalPlayer.Character.PrimaryPart or LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if root then
+                local cf = root.CFrame - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight + (root.Size.Y / 2) - 1 + DEPTH_OFFSET, 0)
+                oldRoot.CFrame = cf * CFrame.Angles(math.rad(180), 0, 0)
+                oldRoot.Velocity = root.Velocity
+                oldRoot.CanCollide = false
+            end
+        end
+    end)
+    table.insert(connections.SemiInvisible, connection)
+    characterConnection = LocalPlayer.CharacterAdded:Connect(function()
+        if not isInvisible then return end
+        if animTrack then animTrack:Stop() animTrack:Destroy() animTrack = nil end
+        if connection then connection:Disconnect() end
+        revertClone()
+        removeFolders()
+        isInvisible = false
+        statusLabel.Text = "Status : Visible"
+        for _, conn in ipairs(connections.SemiInvisible) do if conn then conn:Disconnect() end end
+        connections.SemiInvisible = {}
+    end)
+    table.insert(connections.SemiInvisible, characterConnection)
+    return true
+end
+
+local function disableInvisibility()
+    if animTrack then animTrack:Stop() animTrack:Destroy() animTrack = nil end
+    if connection then connection:Disconnect() end
+    if characterConnection then characterConnection:Disconnect() end
+    revertClone()
+    removeFolders()
+end
+
+-- ══════════════════════════════════════════
+--         TOGGLE BUTTON LOGIC
+-- ══════════════════════════════════════════
+
+toggleBtn.MouseButton1Click:Connect(function()
+    if not isInvisible then
+        removeFolders()
+        setupGodmode()
+        if enableInvisibility() then
+            isInvisible = true
+            statusLabel.Text = "Status : ✓ Invisible"
+            statusLabel.TextColor3 = Color3.fromRGB(80, 255, 150)
+            toggleBtn.Text = "⬡  SEMI INVIS ✓"
+        end
+    else
+        disableInvisibility()
+        isInvisible = false
+        statusLabel.Text = "Status : Visible"
+        statusLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+        toggleBtn.Text = "⬡  SEMI INVIS"
+        for _, conn in ipairs(connections.SemiInvisible) do if conn then conn:Disconnect() end end
+        connections.SemiInvisible = {}
+    end
+end)
