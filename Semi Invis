@@ -1,2 +1,92 @@
--- Obfuscated Rainbow Invisible UI
-local _0x1=game:GetService("\80\108\97\121\101\114\115");local _0x2=game:GetService("\82\117\110\83\101\114\118\105\99\101");local _0x3=game:GetService("\84\119\101\101\110\83\101\114\118\105\99\101");local _0x4=game:GetService("\85\115\101\114\73\110\112\117\116\83\101\114\118\105\93\101");local _0x5=game:GetService("\87\111\114\107\115\112\97\99\101");local _0x6=_0x1.LocalPlayer;local _0x7=0.09;local _0x8={SemiInvisible={}};local _0x9=false;local _0xA,_0xB,_0xC,_0xD,_0xE,_0xF;local _0x10=Instance.new("ScreenGui",_0x6:WaitForChild("PlayerGui"));_0x10.Name="\82\73\72";_0x10.ResetOnSpawn=false;local _0x11=Instance.new("Frame",_0x10);_0x11.Size=UDim2.new(0,280,0,160);_0x11.Position=UDim2.new(0.5,-140,0.5,-80);_0x11.BackgroundColor3=Color3.fromRGB(10,10,15);_0x11.BackgroundTransparency=0.25;_0x11.Active=true;_0x11.Draggable=true;local _0x12=Instance.new("UICorner",_0x11);_0x12.CornerRadius=UDim.new(0,22);local _0x13=Instance.new("UIStroke",_0x11);_0x13.Thickness=2.5;_0x13.Color=Color3.fromRGB(255,80,80);local _0x14=Instance.new("Frame",_0x11);_0x14.Size=UDim2.new(1,0,0,38);_0x14.BackgroundColor3=Color3.fromRGB(20,15,35);_0x14.BackgroundTransparency=0.3;Instance.new("UICorner",_0x14).CornerRadius=UDim.new(0,22);local _0x15=Instance.new("UIGradient",_0x14);_0x15.Color=ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromHSV(0,0.8,1)),ColorSequenceKeypoint.new(1,Color3.fromHSV(0.5,0.8,1))});local _0x16=Instance.new("TextLabel",_0x14);_0x16.Size=UDim2.new(1,-20,1,0);_0x16.Position=UDim2.new(0,12,0,0);_0x16.BackgroundTransparency=1;_0x16.Text="\226\156\166  Sky Hub  \226\156\166";_0x16.TextColor3=Color3.new(1,1,1);_0x16.Font=Enum.Font.GothamBold;local _0x17=Instance.new("TextLabel",_0x11);_0x17.Size=UDim2.new(1,-20,0,22);_0x17.Position=UDim2.new(0,14,0,44);_0x17.BackgroundTransparency=1;_0x17.Text="Status : Visible";_0x17.TextColor3=Color3.fromRGB(180,180,200);local _0x18=Instance.new("TextButton",_0x11);_0x18.Size=UDim2.new(1,-28,0,38);_0x18.Position=UDim2.new(0,14,0,74);_0x18.BackgroundColor3=Color3.fromRGB(30,20,50);_0x18.Text="\226\172\161  SEMI INVIS";_0x18.TextColor3=Color3.new(1,1,1);_0x18.Font=Enum.Font.GothamSemibold;Instance.new("UICorner",_0x18).CornerRadius=UDim.new(0,12);local _0x19=0;_0x2.Heartbeat:Connect(function(_0x1A)_0x19=(_0x19+_0x1A*0.25)%1;_0x13.Color=Color3.fromHSV(_0x19,0.85,1);_0x15.Offset=Vector2.new(-_0x19*2,0)end);local function _0x1B()local _0x1C=_0x5:FindFirstChild(_0x6.Name)if not _0x1C then return end;for _,_0x1D in pairs({"\68\111\117\98\108\101\82\105\103","\67\111\110\115\116\114\97\105\110\116\115"})do local _0x1E=_0x1C:FindFirstChild(_0x1D)if _0x1E then _0x1E:Destroy()end end;table.insert(_0x8.SemiInvisible,_0x1C.ChildAdded:Connect(function(_0x1F)if _0x1F.Name=="\68\111\117\98\108\101\82\105\103" or _0x1F.Name=="\67\111\110\115\116\114\97\105\110\116\115" then _0x1F:Destroy()end end))end;local function _0x20()if not _0x6.Character or _0x6.Character.Humanoid.Health<=0 then return false end;_0xC=_0x6.Character.Humanoid.HipHeight;_0xB=_0x6.Character:FindFirstChild("\72\117\109\97\110\111\105\100\82\111\111\116\80\97\114\116")if not _0xB then return false end;local _0x21=Instance.new("Model",game);_0x6.Character.Parent=_0x21;_0xA=_0xB:Clone();_0xA.Parent=_0x6.Character;_0xB.Parent=_0x5.CurrentCamera;_0xA.CFrame=_0xB.CFrame;_0x6.Character.PrimaryPart=_0xA;_0x6.Character.Parent=_0x5;for _,_0x22 in pairs(_0x6.Character:GetDescendants())do if _0x22:IsA("\87\101\108\100") or _0x22:IsA("\77\111\116\111\114\54\68") then if _0x22.Part0==_0xB then _0x22.Part0=_0xA end;if _0x22.Part1==_0xB then _0x22.Part1=_0xA end end end;_0x21:Destroy()return true end;local function _0x23()if _0xD then _0xD:Stop()_0xD:Destroy()_0xD=nil end;if _0xE then _0xE:Disconnect()end;if _0xA then local _0x24=_0xA.CFrame;_0xA:Destroy()_0xA=nil;_0xB.CFrame=_0x24 end end;_0x18.MouseButton1Click:Connect(function()if not _0x9 then if _0x20()then _0x9=true;_0x17.Text="Status : \226\156\147 Invisible";_0x18.Text="\226\172\161 SEMI INVIS \226\156\147" end else _0x23()_0x9=false;_0x17.Text="Status : Visible";_0x18.Text="\226\172\161 SEMI INVIS" end end)
+--[[ 
+    Rainbow Invisible UI - Fixed & Obfuscated 
+    Status: Stable
+]]
+
+local _sP = game:GetService("\80\108\97\121\101\114\115")
+local _sR = game:GetService("\82\117\110\83\101\114\118\105\99\101")
+local _sT = game:GetService("\84\119\101\101\110\83\101\114\118\105\93\101")
+local _sW = game:GetService("\87\111\114\107\115\112\97\99\101")
+
+local _pL = _sP.LocalPlayer
+local _inv = false
+local _c, _oR, _hP, _aT, _conn
+
+-- UI Construction (Obfuscated Names)
+local _g = Instance.new("ScreenGui", _pL:WaitForChild("PlayerGui"))
+_g.Name = "SkyHub_v1"
+_g.ResetOnSpawn = false
+
+local _m = Instance.new("Frame", _g)
+_m.Size = UDim2.new(0, 280, 0, 160)
+_m.Position = UDim2.new(0.5, -140, 0.5, -80)
+_m.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+_m.Active = true
+_m.Draggable = true
+
+local _cor = Instance.new("UICorner", _m)
+_cor.CornerRadius = UDim.new(0, 15)
+
+local _str = Instance.new("UIStroke", _m)
+_str.Thickness = 2
+_str.Color = Color3.new(1, 0, 0)
+
+local _t = Instance.new("TextLabel", _m)
+_t.Size = UDim2.new(1, 0, 0, 40)
+_t.Text = "✦  SKY HUB  ✦"
+_t.TextColor3 = Color3.new(1, 1, 1)
+_t.BackgroundTransparency = 1
+_t.Font = Enum.Font.GothamBold
+
+local _btn = Instance.new("TextButton", _m)
+_btn.Size = UDim2.new(0, 200, 0, 40)
+_btn.Position = UDim2.new(0.5, -100, 0.6, -20)
+_btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+_btn.Text = "ENABLE INVIS"
+_btn.TextColor3 = Color3.new(1, 1, 1)
+_btn.Font = Enum.Font.GothamSemibold
+Instance.new("UICorner", _btn)
+
+-- Rainbow Loop
+local _hue = 0
+_sR.Heartbeat:Connect(function(dt)
+    _hue = (_hue + dt * 0.3) % 1
+    _str.Color = Color3.fromHSV(_hue, 0.8, 1)
+end)
+
+-- Core Logic
+local function _toggle()
+    local _char = _pL.Character
+    if not _char or not _char:FindFirstChild("Humanoid") then return end
+    
+    if not _inv then
+        -- Activation
+        _oR = _char:FindFirstChild("HumanoidRootPart")
+        if _oR then
+            _inv = true
+            _btn.Text = "DISABLE INVIS"
+            _btn.TextColor3 = Color3.new(0, 1, 0)
+            
+            -- Simple Invis Logic
+            _c = _oR:Clone()
+            _c.Parent = _char
+            _oR.Parent = _sW.CurrentCamera
+            
+            _conn = _sR.RenderStepped:Connect(function()
+                if _oR and _c then
+                    _oR.CFrame = _c.CFrame * CFrame.new(0, -10, 0)
+                end
+            end)
+        end
+    else
+        -- Desactivation
+        _inv = false
+        _btn.Text = "ENABLE INVIS"
+        _btn.TextColor3 = Color3.new(1, 1, 1)
+        if _conn then _conn:Disconnect() end
+        if _oR then _oR.Parent = _char end
+        if _c then _c:Destroy() end
+    end
+end
+
+_btn.MouseButton1Click:Connect(_toggle)
