@@ -1,92 +1,69 @@
---[[ 
-    Rainbow Invisible UI - Fixed & Obfuscated 
-    Status: Stable
-]]
+-- ts file was generated at discord.gg/25ms
 
-local _sP = game:GetService("\80\108\97\121\101\114\115")
-local _sR = game:GetService("\82\117\110\83\101\114\118\105\99\101")
-local _sT = game:GetService("\84\119\101\101\110\83\101\114\118\105\93\101")
-local _sW = game:GetService("\87\111\114\107\115\112\97\99\101")
+local _call5 = game:GetService('RunService')
 
-local _pL = _sP.LocalPlayer
-local _inv = false
-local _c, _oR, _hP, _aT, _conn
+game:GetService('TweenServi]e')
 
--- UI Construction (Obfuscated Names)
-local _g = Instance.new("ScreenGui", _pL:WaitForChild("PlayerGui"))
-_g.Name = "SkyHub_v1"
-_g.ResetOnSpawn = false
+local _LocalPlayer10 = game:GetService('Players').LocalPlayer
+local _call14 = Instance.new('ScreenGui', _LocalPlayer10:WaitForChild('PlayerGui'))
 
-local _m = Instance.new("Frame", _g)
-_m.Size = UDim2.new(0, 280, 0, 160)
-_m.Position = UDim2.new(0.5, -140, 0.5, -80)
-_m.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-_m.Active = true
-_m.Draggable = true
+_call14.Name = 'SkyHub_v1'
+_call14.ResetOnSpawn = false
 
-local _cor = Instance.new("UICorner", _m)
-_cor.CornerRadius = UDim.new(0, 15)
+local _call16 = Instance.new('Frame', _call14)
 
-local _str = Instance.new("UIStroke", _m)
-_str.Thickness = 2
-_str.Color = Color3.new(1, 0, 0)
+_call16.Size = UDim2.new(0, 280, 0, 160)
+_call16.Position = UDim2.new(0.5, -140, 0.5, -80)
+_call16.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+_call16.Active = true
+_call16.Draggable = true
 
-local _t = Instance.new("TextLabel", _m)
-_t.Size = UDim2.new(1, 0, 0, 40)
-_t.Text = "✦  SKY HUB  ✦"
-_t.TextColor3 = Color3.new(1, 1, 1)
-_t.BackgroundTransparency = 1
-_t.Font = Enum.Font.GothamBold
+local _call24 = Instance.new('UICorner', _call16)
 
-local _btn = Instance.new("TextButton", _m)
-_btn.Size = UDim2.new(0, 200, 0, 40)
-_btn.Position = UDim2.new(0.5, -100, 0.6, -20)
-_btn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-_btn.Text = "ENABLE INVIS"
-_btn.TextColor3 = Color3.new(1, 1, 1)
-_btn.Font = Enum.Font.GothamSemibold
-Instance.new("UICorner", _btn)
+_call24.CornerRadius = UDim.new(0, 15)
 
--- Rainbow Loop
-local _hue = 0
-_sR.Heartbeat:Connect(function(dt)
-    _hue = (_hue + dt * 0.3) % 1
-    _str.Color = Color3.fromHSV(_hue, 0.8, 1)
+local _call28 = Instance.new('UIStroke', _call16)
+
+_call28.Thickness = 2
+_call28.Color = Color3.new(1, 0, 0)
+
+local _call32 = Instance.new('TextLabel', _call16)
+
+_call32.Size = UDim2.new(1, 0, 0, 40)
+_call32.Text = '\u{2726}  SKY HUB  \u{2726}'
+_call32.TextColor3 = Color3.new(1, 1, 1)
+_call32.BackgroundTransparency = 1
+_call32.Font = Enum.Font.GothamBold
+
+local _call40 = Instance.new('TextButton', _call16)
+
+_call40.Size = UDim2.new(0, 200, 0, 40)
+_call40.Position = UDim2.new(0.5, -100, 0.6, -20)
+_call40.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+_call40.Text = 'ENABLE INVIS'
+_call40.TextColor3 = Color3.new(1, 1, 1)
+_call40.Font = Enum.Font.GothamSemibold
+
+Instance.new('UICorner', _call40)
+_call5.Heartbeat:Connect(function(_56)
+    _call28.Color = Color3.fromHSV(((0 + (_56 * 0.3)) % 1), 0.8, 1)
 end)
+_call40.MouseButton1Click:Connect(function()
+    local _Character66 = _LocalPlayer10.Character
 
--- Core Logic
-local function _toggle()
-    local _char = _pL.Character
-    if not _char or not _char:FindFirstChild("Humanoid") then return end
-    
-    if not _inv then
-        -- Activation
-        _oR = _char:FindFirstChild("HumanoidRootPart")
-        if _oR then
-            _inv = true
-            _btn.Text = "DISABLE INVIS"
-            _btn.TextColor3 = Color3.new(0, 1, 0)
-            
-            -- Simple Invis Logic
-            _c = _oR:Clone()
-            _c.Parent = _char
-            _oR.Parent = _sW.CurrentCamera
-            
-            _conn = _sR.RenderStepped:Connect(function()
-                if _oR and _c then
-                    _oR.CFrame = _c.CFrame * CFrame.new(0, -10, 0)
-                end
-            end)
-        end
-    else
-        -- Desactivation
-        _inv = false
-        _btn.Text = "ENABLE INVIS"
-        _btn.TextColor3 = Color3.new(1, 1, 1)
-        if _conn then _conn:Disconnect() end
-        if _oR then _oR.Parent = _char end
-        if _c then _c:Destroy() end
-    end
-end
+    _Character66:FindFirstChild('Humanoid')
 
-_btn.MouseButton1Click:Connect(_toggle)
+    local _call70 = _Character66:FindFirstChild('HumanoidRootPart')
+
+    _call40.Text = 'DISABLE INVIS'
+    _call40.TextColor3 = Color3.new(0, 1, 0)
+
+    local _call74 = _call70:Clone()
+
+    _call74.Parent = _Character66
+    _call70.Parent = game:GetService('Workspace').CurrentCamera
+
+    _call5.RenderStepped:Connect(function()
+        _call70.CFrame = (_call74.CFrame * CFrame.new(0, -10, 0))
+    end)
+end)
